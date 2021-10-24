@@ -1,5 +1,4 @@
 
-const { Console } = require('console');
 var mysql = require('mysql');
 
 var con = mysql.createConnection({
