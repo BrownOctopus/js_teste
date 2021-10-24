@@ -29,16 +29,7 @@ function connected(err)
         });
     });
 
-        con.query("SELECT evento.nome FROM evento WHERE criador=" + 2, function (err, result, fields) {
-            if (err) throw err;
-            str = ""
-            result.forEach(r => {
-                fields.forEach(e => {
-                     str += r[e.name] + ", "
-                 });
-            });
-            console.log("Eventod do  puto: " + str)
-    });
+    con.query("SELECT evento.nome FROM evento WHERE criador=" + 2, printResult);
 
     con.end(function(err) {
         if (err) {
@@ -49,3 +40,16 @@ function connected(err)
 }
 
 con.connect(connected)
+
+function printResult(err, result, fields) 
+{
+    if (err) throw err;
+    str = ""
+    result.forEach(r => {
+        fields.forEach(e => {
+             str += r[e.name] + ", "
+         });
+    });
+    console.log("Eventod do  puto: " + str)
+}
+
