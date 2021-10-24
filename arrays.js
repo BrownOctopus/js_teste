@@ -1,4 +1,5 @@
 
+const { Console } = require('console');
 var mysql = require('mysql');
 
 var con = mysql.createConnection({
@@ -29,7 +30,9 @@ function connected(err)
         });
     });
 
-    con.query("SELECT evento.nome FROM evento WHERE criador=" + 2, printResult);
+    con.query("SELECT evento.nome FROM evento WHERE criador=" + 2, printEventos);
+
+    con.query("SELECT perfil.nome FROM perfil INNER JOIN participantes ON perfil.idperfil = participantes.perfil WHERE participantes.evento=" + 3, printParticipantes);
 
     con.end(function(err) {
         if (err) {
@@ -37,11 +40,15 @@ function connected(err)
         }
         console.log('Closed the database connection.');
       });
+
+     
+
+    
 }
 
 con.connect(connected)
 
-function printResult(err, result, fields) 
+function printEventos(err, result, fields) 
 {
     if (err) throw err;
     str = ""
@@ -50,6 +57,18 @@ function printResult(err, result, fields)
              str += r[e.name] + ", "
          });
     });
-    console.log("Eventod do  puto: " + str)
+    console.log("Eventos: " + str)
+}
+
+function printParticipantes(err, result, fields) 
+{
+    if (err) throw err;
+    str = ""
+    result.forEach(r => {
+        fields.forEach(e => {
+             str += r[e.name] + ", "
+         });
+    });
+    console.log("Participantes deste evento: " + str)
 }
 
