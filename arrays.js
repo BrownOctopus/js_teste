@@ -29,7 +29,11 @@ function connected(err)
         });
     });
 
-    con.query("SELECT evento.nome FROM evento WHERE criador=" + 2, printResult);
+    con.query("SELECT evento.nome FROM evento WHERE criador=" + 2, printEventos);
+
+    con.query("SELECT perfil.nome FROM perfil INNER JOIN participantes ON perfil.idperfil = participantes.perfil WHERE participantes.evento=" + 3, printParticipantes);
+
+    con.query("SELECT evento.nome FROM evento INNER JOIN participantes ON evento.idevento = participantes.evento WHERE participantes.perfil=" + 1, printOndeVou);
 
     con.end(function(err) {
         if (err) {
@@ -37,11 +41,15 @@ function connected(err)
         }
         console.log('Closed the database connection.');
       });
+
+     
+
+    
 }
 
 con.connect(connected)
 
-function printResult(err, result, fields) 
+function printEventos(err, result, fields) 
 {
     if (err) throw err;
     str = ""
@@ -50,6 +58,29 @@ function printResult(err, result, fields)
              str += r[e.name] + ", "
          });
     });
-    console.log("Eventod do  puto: " + str)
+    console.log("Eventos: " + str)
 }
 
+function printParticipantes(err, result, fields) 
+{
+    if (err) throw err;
+    str = ""
+    result.forEach(r => {
+        fields.forEach(e => {
+             str += r[e.name] + ", "
+         });
+    });
+    console.log("Participantes deste evento: " + str)
+}
+
+function printOndeVou(err, result, fields) 
+{
+    if (err) throw err;
+    str = ""
+    result.forEach(r => {
+        fields.forEach(e => {
+             str += r[e.name] + ", "
+         });
+    });
+    console.log("Este perfil vai: " + str)
+}
