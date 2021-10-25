@@ -5,12 +5,12 @@ var fs = require('fs')
 var mysql = require('mysql');
 
 http.createServer(function (req, res) {
-  var body = "";
-  req.on('data', function (chunk) {
-    body += chunk;
+  var dados = "";
+  req.on('data', function (recebido) {
+    dados += recebido;
   });
   req.on('end', function () {
-    var q = url.parse("http://localhost:8080/?" + body, true).query;
+    var q = url.parse("http://localhost:8080/?" + dados, true).query;
     responseFile = "/Users/Bernardo/Desktop/js_teste/hello.html"
     if (!q.nome || !q.email || !q.pass)
     {
@@ -46,10 +46,11 @@ http.createServer(function (req, res) {
             })
             console.log("O utilizador x foi registado na base de dados")
     }
+
     fs.readFile(responseFile, function (err,data) {
         if (err) {
             res.writeHead(404);
-            res.end(JSON.stringify(err));
+            res.end("Eh pá, não temos essa página nos nossos servidores");
             return;
         }
         else
